@@ -11,7 +11,7 @@
     "jest-diff": "^14.0.0",
     "jest-file-exists": "^14.0.0",
     "jest-util": "^14.0.0",
-    "pretty-format": "git://github.com/facebook/jest.git/packages/"
+    "pretty-format": "methyl/pretty-format"
   },
   "jest": {
     "rootDir": "./src",
