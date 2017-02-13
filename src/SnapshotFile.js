@@ -41,8 +41,12 @@ const ensureDirectoryExists = (filePath: Path) => {
   } catch (e) {}
 };
 
-const escape = string => string.replace(/\`/g, '\\\`');
-const unescape = string => string.replace(/\\(\"|\\|\')/g, '$1');
+const printBacktickString = (str: string) => {
+  return '`' + str.replace(/`|\\|\${/g, '\\$&') + '`';
+};
+
+const normalizeNewlines =
+  string => string.replace(/\r\n/g, '\n');
 
 // Extra line breaks at the beginning and at the end of the snapshot are useful
 // to make the content of the snapshot easier to read
@@ -102,8 +106,8 @@ class SnapshotFile {
     const isEmpty = Object.keys(this._content).length === 0;
     if ((this._dirty || this._uncheckedKeys.size) && !isEmpty) {
       const snapshots = Object.keys(this._content).sort().map(key =>
-        'exports[`' + escape(key) + '`] = `' +
-        escape(this._content[key]) + '`;',
+        'exports[' + printBacktickString(key) + '] = ' +
+           printBacktickString(normalizeNewlines(this._content[key])) + ';',
       );
 
       ensureDirectoryExists(this._filename);
